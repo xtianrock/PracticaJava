@@ -53,17 +53,16 @@ public class Servlet_boletos extends HttpServlet {
                   dispatcher.forward(request, response);            
             }            
           
-                  if(nBoletos<1||nBoletos>10) {
+             if(nBoletos<1||nBoletos>10) {
                   request.setAttribute("error_boleto", 
                     "<div style=\"color:red\">Boletos debe ser un numero entre 1 y 10</div>");
-                   dispatcher =request.getRequestDispatcher("/vistas/boletos.jsp");                 
+                   dispatcher =request.getRequestDispatcher("/vistas/boletos.jsp");  
+                     dispatcher.forward(request, response);
                   }
                   else
                   {
-                     request.setAttribute("nBoletos",nBoletos);
-                     dispatcher =request.getRequestDispatcher("/apuestas");                  
+                          response.sendRedirect("/PracticaJava/apuestas?boletos="+nBoletos);
                   }   
-             dispatcher.forward(request, response);
             // Redirigimos petición a página JSP -> form_servlet_procesado.jsp
            
         }

@@ -6,6 +6,10 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.Integer.parseInt;
+import static java.lang.System.out;
+import java.util.Enumeration;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,18 +35,31 @@ public class servlet_apuestas extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet servlet_apuestas</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Boletos: " + request.getAttribute("nBoletos")+" </h1>");
-            out.println("</body>");
-            out.println("</html>");
+         String botonEnviar=request.getParameter("continuar2");
+          RequestDispatcher dispatcher;
+         if (botonEnviar==null) {            
+           dispatcher =request.getRequestDispatcher("/vistas/apuestas.jsp"); 
+           dispatcher.forward(request, response);
         }
+        else {
+          int contador=1;
+        
+          for(int i=1;i<parseInt(request.getParameter("boletos"))+1;i++)
+          {            
+              out.println(request.getParameter("apuesta"+i));
+                  if(!isInteger(request.getParameter("apuesta"+i)))
+                  {
+                    request.setAttribute("error_boleto"+i, 
+                    "<div style=\"color:red\">El boleto "+i+" no contiene una apuesta valida.</div>");
+                    dispatcher =request.getRequestDispatcher("/vistas/apuestas.jsp"); 
+                    dispatcher.forward(request, response); 
+                  }   
+          }          
+           dispatcher =request.getRequestDispatcher("/vistas/generarApuestas.jsp"); 
+           dispatcher.forward(request, response); 
+           
+         }
+       
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -83,5 +100,14 @@ public class servlet_apuestas extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+     
+    public static boolean isInteger(String s) {
+    try { 
+        Integer.parseInt(s); 
+    } catch(NumberFormatException e) { 
+        return false; 
+    }
+    // only got here if we didn't return false
+    return true;
+}
 }

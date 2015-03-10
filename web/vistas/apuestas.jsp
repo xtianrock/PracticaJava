@@ -22,19 +22,37 @@
         
         <% int nBoletos=Integer.parseInt(request.getParameter("boletos"));%>
         <p>Se juegan <%=nBoletos%> boletos</p>
-        <%
-        for(int i=0;i<nBoletos;i++)
+        <form method="post">
+             <%
+        for(int i=1;i<nBoletos+1;i++)
         { %>
-          <label for="apuesta <%=i%>">Boleto <%=i%> - Nº apuestas: </label>
-          <select name="apuesta <%=i%>">
-              <% for (int f=1;f<7;f++)
-              { %>
-              <option value="<%=f%>"><%=f%></option>
-            <%} %>
+          <p><%= request.getAttribute("error_boleto"+i) == null ? "" : request.getAttribute("error_boleto"+i) %></p>
+          <label for="apuesta<%=i%>">Boleto <%=i%> - Nº apuestas: </label>
+          <select name="apuesta<%=i%>">
+               <option value="seleccione">Seleccione</option>
+              <% for (int f=1;f<9;f++)
+              {             
+                int nApuestas;
+                try{ nApuestas=Integer.parseInt(request.getParameter("apuesta"+i));}
+                catch(NumberFormatException e){nApuestas=0;}
+                //if(request.getParameter("apuesta"+i)!=null)
+               
+               if(nApuestas == f)
+              {%>
+              <option value="<%=f%>" selected><%=f%></option>
+               <%}
+              else
+                {%>
+                 <option value="<%=f%>"><%=f%></option>
+              
+            <%} 
+            } %>
           </select>
           </br></br>
+          
         <%}
         %>
-      
+        <button type="submit" name="continuar2">Continuar</button>      
+        </form>       
     </body>
 </html>
