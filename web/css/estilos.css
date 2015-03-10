@@ -8,3 +8,11 @@ and open the template in the editor.
     Author     : xtianrock
 */
 
+p
+{
+    color: blue;
+}
+body
+{
+    background: red;
+}

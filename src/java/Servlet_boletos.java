@@ -48,14 +48,14 @@ public class Servlet_boletos extends HttpServlet {
                 
             } catch (Exception e) {
                  request.setAttribute("error_boleto", 
-                    "<div style=\"color:red\">Boletos debe contener un numero entero.</div>");
+                    "Boletos debe contener un numero entero.");
                   dispatcher =request.getRequestDispatcher("/vistas/boletos.jsp"); 
                   dispatcher.forward(request, response);            
             }            
           
              if(nBoletos<1||nBoletos>10) {
                   request.setAttribute("error_boleto", 
-                    "<div style=\"color:red\">Boletos debe ser un numero entre 1 y 10</div>");
+                    "Boletos debe ser un numero entre 1 y 10");
                    dispatcher =request.getRequestDispatcher("/vistas/boletos.jsp");  
                      dispatcher.forward(request, response);
                   }

@@ -5,24 +5,20 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/css/estilos.css" type="text/css">
     </head>
     <body>
-          <%  
-            // Obtenemos información que nos ha pasado el servlet para ello
-            // utilizamos los métodos getAttribute/setAttribute
-            // Como lo que se almacena es de tipo Object hay que convertirlo
-            // al tipo original. Podría ser otro tipo (int), otra clase, etc.
-           
-            
-             String errorBoleto=(String) request.getAttribute("error_boleto");            
-            out.write(errorBoleto);
-        %>
+
+          <%@include file="/vistas/menu.jsp" %>
+        <h2>Generacion de apuestas en modo texto</h2>
+        
         <form method="post">
+                <p style="color:red"><%=request.getAttribute("error_boleto")==null ? "" : request.getAttribute("error_boleto")%></p>
                 <label for="boletos">Boletos: </label>
                 <input type="text" name="boletos" value="<%= request.getParameter("boletos") == null ? "" : request.getParameter("boletos") %>"/>
                 <button type="submit" name="continuar" >Continuar</button>              

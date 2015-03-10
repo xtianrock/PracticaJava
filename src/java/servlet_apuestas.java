@@ -42,22 +42,27 @@ public class servlet_apuestas extends HttpServlet {
            dispatcher.forward(request, response);
         }
         else {
-          int contador=1;
+          boolean errores=false;
         
           for(int i=1;i<parseInt(request.getParameter("boletos"))+1;i++)
           {            
-              out.println(request.getParameter("apuesta"+i));
-                  if(!isInteger(request.getParameter("apuesta"+i)))
+                if(!isInteger(request.getParameter("apuesta"+i)))
                   {
                     request.setAttribute("error_boleto"+i, 
-                    "<div style=\"color:red\">El boleto "+i+" no contiene una apuesta valida.</div>");
-                    dispatcher =request.getRequestDispatcher("/vistas/apuestas.jsp"); 
-                    dispatcher.forward(request, response); 
+                    "El boleto "+i+" no contiene una apuesta valida.");
+                    errores=true;
                   }   
-          }          
-           dispatcher =request.getRequestDispatcher("/vistas/generarApuestas.jsp"); 
-           dispatcher.forward(request, response); 
-           
+          }    
+          if(errores)
+          {
+              dispatcher =request.getRequestDispatcher("/vistas/apuestas.jsp"); 
+                    dispatcher.forward(request, response); 
+          }
+          else
+          {
+              dispatcher =request.getRequestDispatcher("/vistas/generarApuestas.jsp"); 
+              dispatcher.forward(request, response);            
+          }  
          }
        
     }

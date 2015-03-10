@@ -17,21 +17,26 @@
         <h2>Generacion de apuestas en modo texto</h2>
         <h3>Apuestas generadas</h3>
            <% int nBoletos=Integer.parseInt(request.getParameter("boletos")); 
+            int total=0;
         for(int i=1;i<nBoletos+1;i++)
         {%> 
         <p>Boleto <%=i%></p>
          <%int nApuestas=Integer.parseInt(request.getParameter("apuesta"+i));
                for (int f=1;f<nApuestas+1;f++)
-              {%>
-                  Apuesta <%=f%>: 
+              {
+                  total++;%>
+                  <p id="apuesta">Apuesta <%=f%>: 
                   <%for (int j=1;j<6;j++)
                    {%>
                    <%=aleatorio()%>
                    <%}%>
-                  </br>
-             <% }
-              
-         }%>
+                  </p>
+                   
+            <%}%>
+             <p id="reintegro">Reintegro: <%=reintegro()%></p>             
+             <p id="importeBoleto">Importe boleto: <%=nApuestas%> €</p>
+         <%}%>         
+         <p id="total">El importe <b>total</b> que debe abonar es de: <%=total%>€</p>
     </body>
 </html>
 
@@ -39,4 +44,10 @@
 {
     Random r = new Random();
     return  r.nextInt(49)+1; 
+}%>
+
+<%! public int reintegro()
+{
+    Random r = new Random();
+    return  r.nextInt(9)+1; 
 }%>
