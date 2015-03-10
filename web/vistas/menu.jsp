@@ -7,5 +7,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
-<h2><a href="/PracticaJava/boletos">Modo texto</a>  <a href="/PracticaJava/boletos">Modo grafico</a></h2>
+<h2><a href="/PracticaJava/texto">Modo texto</a>  <a href="/PracticaJava/grafico">Modo grafico</a></h2>
   

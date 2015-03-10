@@ -20,7 +20,7 @@
             int total=0;
         for(int i=1;i<nBoletos+1;i++)
         {%> 
-        <p>Boleto <%=i%></p>
+        <p><b>Boleto <%=i%></b></p>
          <%int nApuestas=Integer.parseInt(request.getParameter("apuesta"+i));
                for (int f=1;f<nApuestas+1;f++)
               {

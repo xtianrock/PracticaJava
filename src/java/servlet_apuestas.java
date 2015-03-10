@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -60,8 +61,16 @@ public class servlet_apuestas extends HttpServlet {
           }
           else
           {
-              dispatcher =request.getRequestDispatcher("/vistas/generarApuestas.jsp"); 
+               HttpSession session = request.getSession();
+              if(session.getAttribute("modo") == null){
+                response.sendRedirect("index.jsp");
+               }
+              else
+              {
+                  String modo = (String) session.getAttribute("modo");
+              dispatcher =request.getRequestDispatcher("/vistas/resultado"+modo+".jsp"); 
               dispatcher.forward(request, response);            
+              } 
           }  
          }
        

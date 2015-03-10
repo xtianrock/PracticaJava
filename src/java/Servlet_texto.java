@@ -6,6 +6,8 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.Integer.parseInt;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,10 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author xtianrock
+ * @author 2DAWT
  */
-@WebServlet(urlPatterns = {"/NewServlet"})
-public class NewServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/modo_texto"})
+public class Servlet_texto extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,17 +33,39 @@ public class NewServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet NewServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet NewServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        
+        String botonEnviar=request.getParameter("continuar");
+          RequestDispatcher dispatcher;
+       // response.sendRedirect("www.google.com");
+        if (botonEnviar==null) {            
+            dispatcher =request.getRequestDispatcher("/vistas/boletos.jsp"); 
+            dispatcher.forward(request, response);
+        }
+        else {
+            int nBoletos=0;
+            try {
+                 nBoletos=parseInt(request.getParameter("boletos"));               
+                
+            } catch (Exception e) {
+                 request.setAttribute("error_boleto", 
+                    "<div style=\"color:red\">Boletos debe contener un numero entero.</div>");
+                  dispatcher =request.getRequestDispatcher("/vistas/boletos.jsp"); 
+                  dispatcher.forward(request, response);            
+            }            
+          
+                  if(nBoletos<1||nBoletos>10) {
+                  request.setAttribute("error_boleto", 
+                    "<div style=\"color:red\">Boletos debe ser un numero entre 1 y 10</div>");
+                   dispatcher =request.getRequestDispatcher("/vistas/boletos.jsp");                 
+                  }
+                  else
+                  {
+                     request.setAttribute("nBoletos",nBoletos);
+                     dispatcher =request.getRequestDispatcher("/apuestas");                  
+                  }   
+             dispatcher.forward(request, response);
+            // Redirigimos petición a página JSP -> form_servlet_procesado.jsp
+           
         }
     }
 
