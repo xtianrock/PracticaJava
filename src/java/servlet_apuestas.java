@@ -36,44 +36,36 @@ public class servlet_apuestas extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-         String botonEnviar=request.getParameter("continuar2");
-          RequestDispatcher dispatcher;
-         if (botonEnviar==null) {            
-           dispatcher =request.getRequestDispatcher("/vistas/apuestas.jsp"); 
-           dispatcher.forward(request, response);
+        String botonEnviar = request.getParameter("continuar2");
+        RequestDispatcher dispatcher;
+        if (botonEnviar == null) {
+            dispatcher = request.getRequestDispatcher("/vistas/apuestas.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            boolean errores = false;
+
+            for (int i = 1; i < parseInt(request.getParameter("boletos")) + 1; i++) {
+                if (!isInteger(request.getParameter("apuesta" + i))) {
+                    request.setAttribute("error_boleto" + i,
+                            "El boleto " + i + " no contiene una apuesta valida.");
+                    errores = true;
+                }
+            }
+            if (errores) {
+                dispatcher = request.getRequestDispatcher("/vistas/apuestas.jsp");
+                dispatcher.forward(request, response);
+            } else {
+                HttpSession session = request.getSession();
+                if (session.getAttribute("modo") == null) {
+                    response.sendRedirect("index.jsp");
+                } else {
+                    String modo = (String) session.getAttribute("modo");
+                    dispatcher = request.getRequestDispatcher("/vistas/resultado" + modo + ".jsp");
+                    dispatcher.forward(request, response);
+                }
+            }
         }
-        else {
-          boolean errores=false;
-        
-          for(int i=1;i<parseInt(request.getParameter("boletos"))+1;i++)
-          {            
-                if(!isInteger(request.getParameter("apuesta"+i)))
-                  {
-                    request.setAttribute("error_boleto"+i, 
-                    "El boleto "+i+" no contiene una apuesta valida.");
-                    errores=true;
-                  }   
-          }    
-          if(errores)
-          {
-              dispatcher =request.getRequestDispatcher("/vistas/apuestas.jsp"); 
-                    dispatcher.forward(request, response); 
-          }
-          else
-          {
-               HttpSession session = request.getSession();
-              if(session.getAttribute("modo") == null){
-                response.sendRedirect("index.jsp");
-               }
-              else
-              {
-                  String modo = (String) session.getAttribute("modo");
-              dispatcher =request.getRequestDispatcher("/vistas/resultado"+modo+".jsp"); 
-              dispatcher.forward(request, response);            
-              } 
-          }  
-         }
-       
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -114,14 +106,14 @@ public class servlet_apuestas extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-     
+
     public static boolean isInteger(String s) {
-    try { 
-        Integer.parseInt(s); 
-    } catch(NumberFormatException e) { 
-        return false; 
+        try {
+            Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        // only got here if we didn't return false
+        return true;
     }
-    // only got here if we didn't return false
-    return true;
-}
 }
