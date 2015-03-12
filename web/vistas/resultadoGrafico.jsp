@@ -2,11 +2,10 @@
     Document   : resultadoGrafico
     Created on : 10-mar-2015, 17:41:41
     Author     : 2DAWT
---%><%@page import="org.apache.jasper.tagplugins.jstl.ForEach"%>
-<%@page import="java.util.Random"%>
-
-
-<%@page import="java.util.Random"%>
+--%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.apache.jasper.tagplugins.jstl.ForEach"%>
+<%@page import="cris.Boleto" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -19,13 +18,14 @@
         <%@include file="/vistas/menu.jsp" %>
         <h2>Generacion de apuestas en modo grafico</h2>
         <h3>Apuestas generadas</h3>
-        <% int nBoletos = Integer.parseInt(request.getParameter("boletos"));
+        <% ArrayList<Boleto> boletos =(ArrayList<Boleto>)request.getAttribute("boletos");
             int total = 0;
-            for (int i = 1; i < nBoletos + 1; i++) {%> 
-        <div class="boleto">
-            <%int nApuestas = Integer.parseInt(request.getParameter("apuesta" + i));
-                for (int f = 0; f < 8; f++) {
-            int apuesta[]=aleatorios();%>  
+            for (Boleto boleto: boletos){%> 
+        <div class="boleto" style="display:inline-block; width: 100%">
+            <%int nApuestas = boleto.getnApuestas();
+               for (int f = 0; f < nApuestas; f++) {
+                total++;
+            int apuesta[]=boleto.getApuesta();%>             
             <table border="1" class="apuesta" style="float:left" >
                 <%for (int k = 0; k < 10; k++) {%>
                 <tr>
@@ -39,40 +39,16 @@
             </table>
             <%}%>
         </div>
-        <p id="reintegro">Reintegro: <%=reintegro()%></p>             
+        <div style="float:none">
+             <p id="reintegro">Reintegro: <%=boleto.getReintegro()%></p>             
         <p id="importeBoleto">Importe boleto: <%=nApuestas%> €</p>
+        </div>       
+         </br>
         <%}%>         
         <p id="total">El importe <b>total</b> que debe abonar es de: <%=total%>€</p>
     </body>
 </html>
 
-
-
-<%! public int reintegro() {
-        Random r = new Random();
-        return r.nextInt(9) + 1;
-    }%>
-    
-    
-       <%!public int[] aleatorios() {
-        int[] aleatorios = new int[6];
-        
-        for (int i = 0; i < aleatorios.length; i++) {
-            Boolean existe = true;
-            int numero;
-               Random r = new Random();         
-            do {
-                numero =  r.nextInt(49) + 1;
-                if (! this.indexOf(aleatorios, numero)) {
-                    existe = false;
-                }
-            } while (existe);
-            aleatorios[i] = numero;
-            
-        }
-        
-        return aleatorios;
-    }%>
     
     <%!public boolean indexOf(int[] arr, int targetValue) {
 	for(int s: arr){

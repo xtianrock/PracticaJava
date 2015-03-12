@@ -1,3 +1,5 @@
+package cris;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -7,19 +9,23 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.Integer.parseInt;
+import static java.lang.System.out;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author 2DAWT
  */
-@WebServlet(urlPatterns = {"/boletos"})
-public class Servlet_boletos extends HttpServlet {
+@WebServlet(urlPatterns = {"/apuestas"})
+public class servlet_apuestas extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,42 +36,49 @@ public class Servlet_boletos extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    ArrayList<Boleto> boletos= new ArrayList<Boleto>();
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        String botonEnviar=request.getParameter("continuar");
-          RequestDispatcher dispatcher;
-       // response.sendRedirect("www.google.com");
-        if (botonEnviar==null) {            
-            dispatcher =request.getRequestDispatcher("/vistas/boletos.jsp"); 
+        boletos.clear();
+        String botonEnviar = request.getParameter("continuar2");
+        RequestDispatcher dispatcher;
+        if (botonEnviar == null) {
+            dispatcher = request.getRequestDispatcher("/vistas/apuestas.jsp");
             dispatcher.forward(request, response);
+        } else {
+            boolean errores = false;
+            int nBoletos=parseInt(request.getParameter("boletos"));           
+            for (int i = 1; i < nBoletos+1; i++) {
+                String apuesta=request.getParameter("apuesta" + i);
+                if (!isInteger(apuesta)||parseInt(apuesta)<1||parseInt(apuesta)>10) {
+                    request.setAttribute("error_boleto" + i,
+                            "El boleto " + i + " no contiene una apuesta valida.");
+                    errores = true;
+                }
+                else
+                {
+                    Boleto boleto =new Boleto(parseInt(apuesta));
+                    boletos.add(boleto);
+                }
+            }
+            if (errores) {
+                dispatcher = request.getRequestDispatcher("/vistas/apuestas.jsp");
+                dispatcher.forward(request, response);
+            } else {
+                HttpSession session = request.getSession();
+                if (session.getAttribute("modo") == null) {
+                    response.sendRedirect("index.jsp");
+                } else {
+                    String modo = (String) session.getAttribute("modo");
+                    request.setAttribute("boletos", boletos);
+                    dispatcher = request.getRequestDispatcher("/vistas/resultado" + modo + ".jsp");
+                    dispatcher.forward(request, response);
+                }
+            }
         }
-        else {
-            int nBoletos=0;
-            try {
-                 nBoletos=parseInt(request.getParameter("boletos"));               
-                
-            } catch (Exception e) {
-                 request.setAttribute("error_boleto", 
-                    "Boletos debe contener un numero entero.");
-                  dispatcher =request.getRequestDispatcher("/vistas/boletos.jsp"); 
-                  dispatcher.forward(request, response);            
-            }            
-          
-             if(nBoletos<1||nBoletos>10) {
-                  request.setAttribute("error_boleto", 
-                    "Boletos debe ser un numero entre 1 y 10");
-                   dispatcher =request.getRequestDispatcher("/vistas/boletos.jsp");  
-                     dispatcher.forward(request, response);
-                  }
-                  else
-                  {
-                          response.sendRedirect("/PracticaJava/apuestas?boletos="+nBoletos);
-                  }   
-            // Redirigimos petición a página JSP -> form_servlet_procesado.jsp
-           
-        }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -107,4 +120,13 @@ public class Servlet_boletos extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    public static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        // only got here if we didn't return false
+        return true;
+    }
 }
