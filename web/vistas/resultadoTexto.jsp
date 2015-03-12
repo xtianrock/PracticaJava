@@ -20,8 +20,8 @@
         <h3>Apuestas generadas</h3>
            <% ArrayList<Boleto> boletos =(ArrayList<Boleto>)request.getAttribute("boletos");
             int total = 0;
-            for (int i=1; i<boletos.size();i++){%>
-        <p><b>Boleto <%=i%></b></p>
+            for (int i=0; i<boletos.size();i++){%>
+        <p><b>Boleto <%=i+1%></b></p>
          <%int nApuestas=boletos.get(i).getnApuestas();
                for (int f=1;f<nApuestas+1;f++)
               {
