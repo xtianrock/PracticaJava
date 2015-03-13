@@ -8,4 +8,3 @@
 <!DOCTYPE html>
 
 <h2><a href="/PracticaJava/texto">Modo texto</a>  <a href="/PracticaJava/grafico">Modo grafico</a></h2>
-  

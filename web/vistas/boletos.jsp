@@ -14,8 +14,8 @@
     </head>
     <body>
 
-          <%@include file="/vistas/menu.jsp" %>
-        <h2>Generacion de apuestas en modo texto</h2>
+          <%@include file="/vistas/menu.jsp" %>       
+          <h2>Generacion de apuestas en modo <%=session.getAttribute("modo")%></h2>
         
         <form method="post">
                 <p style="color:red"><%=request.getAttribute("error_boleto")==null ? "" : request.getAttribute("error_boleto")%></p>

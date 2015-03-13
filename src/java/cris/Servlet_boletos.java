@@ -5,7 +5,6 @@ package cris;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.Integer.parseInt;
@@ -35,38 +34,34 @@ public class Servlet_boletos extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        String botonEnviar=request.getParameter("continuar");
-          RequestDispatcher dispatcher;
-       // response.sendRedirect("www.google.com");
-        if (botonEnviar==null) {            
-            dispatcher =request.getRequestDispatcher("/vistas/boletos.jsp"); 
+
+        String botonEnviar = request.getParameter("continuar");
+        RequestDispatcher dispatcher;
+        // response.sendRedirect("www.google.com");
+        if (botonEnviar == null) {
+            dispatcher = request.getRequestDispatcher("/vistas/boletos.jsp");
             dispatcher.forward(request, response);
-        }
-        else {
-            int nBoletos=0;
+        } else {
+            int nBoletos = 0;
             try {
-                 nBoletos=parseInt(request.getParameter("boletos"));               
-                
+                nBoletos = parseInt(request.getParameter("boletos"));
+
             } catch (Exception e) {
-                 request.setAttribute("error_boleto", 
-                    "Boletos debe contener un numero entero.");
-                  dispatcher =request.getRequestDispatcher("/vistas/boletos.jsp"); 
-                  dispatcher.forward(request, response);            
-            }            
-          
-             if(nBoletos<1||nBoletos>10) {
-                  request.setAttribute("error_boleto", 
-                    "Boletos debe ser un numero entre 1 y 10");
-                   dispatcher =request.getRequestDispatcher("/vistas/boletos.jsp");  
-                     dispatcher.forward(request, response);
-                  }
-                  else
-                  {
-                          response.sendRedirect("/PracticaJava/apuestas?boletos="+nBoletos);
-                  }   
-            // Redirigimos petición a página JSP -> form_servlet_procesado.jsp
-           
+                request.setAttribute("error_boleto",
+                        "Boletos debe contener un numero entero.");
+                dispatcher = request.getRequestDispatcher("/vistas/boletos.jsp");
+                dispatcher.forward(request, response);
+            }
+
+            if (nBoletos < 1 || nBoletos > 10) {
+                request.setAttribute("error_boleto",
+                        "Boletos debe ser un numero entre 1 y 10");
+                dispatcher = request.getRequestDispatcher("/vistas/boletos.jsp");
+                dispatcher.forward(request, response);
+            } else {
+                response.sendRedirect("/PracticaJava/apuestas?boletos=" + nBoletos);
+            }
+
         }
     }
 
